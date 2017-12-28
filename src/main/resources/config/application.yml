@@ -1,0 +1,44 @@
+# use a random unassigned HTTP port by scanning for free port
+server:
+  port: 8080
+
+
+# For Spring Actuator /info endpoint
+info:
+    artifact: spring-etcd-example
+    name: spring-etcd-example
+    description: Spring Etcd Example
+    version: 1.0.0
+
+#management:
+#  security:
+#    enabled: false
+#  health:
+#    consul:
+#      enabled: false   # must be false to pass /health check
+
+endpoints:
+  health:
+    sensitive: false
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.consul: DEBUG
+
+#logging:
+#  level:
+#    org.springframework: DEBUG
+
+#spring:
+#  cloud:
+#    consul:
+#      discovery:
+#        healthCheckPath: /health
+#        healthCheckInterval: 15s
+
+etcd:
+  uris: http://localhost:2379
