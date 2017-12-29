@@ -114,7 +114,7 @@ public class BookRepositoryImpl implements BookRepository {
             GetResponse response = futureResponse.get();
             if (response.getKvs().isEmpty()) {
                 log.info("Failed to retrieve any book.");
-                return null;
+                return new ArrayList<>();
             }
 
 
@@ -137,8 +137,6 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public Map<String, String> findAllKeys() {
         try {
-            //byte[] bytes = {0x0};
-            //ByteSequence key = ByteSequence.fromBytes(bytes);
             ByteSequence key = ByteSequence.fromString("\0");
             GetOption option = GetOption.newBuilder()
                     .withSortField(GetOption.SortTarget.KEY)
