@@ -2,6 +2,7 @@ package com.basaki.data.repository;
 
 import com.basaki.data.entity.Book;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.stereotype.Repository;
 
@@ -39,6 +40,8 @@ public interface BookRepository {
      * @return all entities
      */
     List<Book> findAll();
+
+    Map<String, String> findAllKeys();
 
     /**
      * Deletes a given book entity.

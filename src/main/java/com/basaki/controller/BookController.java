@@ -6,6 +6,7 @@ import com.basaki.service.BookService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,5 +69,12 @@ public class BookController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/books")
     public void deleteAll() {
         service.deleteAll();
+    }
+
+    @ApiOperation(value = "Retrieves all keys.", responseContainer = "Map")
+    @RequestMapping(method = RequestMethod.GET, produces = {
+            MediaType.APPLICATION_JSON_VALUE}, value = "/keys")
+    public Map<String, String> readAllKeys() {
+        return service.readEverything();
     }
 }

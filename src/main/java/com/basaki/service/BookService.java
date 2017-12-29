@@ -5,6 +5,7 @@ import com.basaki.data.repository.BookRepository;
 import com.basaki.error.exception.DataNotFoundException;
 import com.basaki.model.BookRequest;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,10 @@ public class BookService {
         }
 
         return books;
+    }
+
+    public Map<String, String> readEverything() {
+        return repository.findAllKeys();
     }
 
     public void delete(UUID id) {
