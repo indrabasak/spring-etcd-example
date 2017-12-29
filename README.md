@@ -10,8 +10,16 @@ a Java client for etcd, to communicate with the database.
 
 ### Introduction to etcd
 etcd is a distributed key-value store. It is written in Go and uses [Raft](https://raft.github.io/)
-protocol to communicate between different nodes in the cluster. Raft is a 
-consensus algorithm for managing a replicated log. 
+protocol to communicate between different nodes in the cluster. `Raft` is a 
+protocol for implementing distributed consensus. 
+
+`etcd` has a well-defined API to interact with clients. It uses [gRPC](https://grpc.io/)
+protocol to communicate with clients. As with any RPC (Remote Procedure Call)
+application, a `gRPC` client invokes methods remotely on services defined in a 
+server.  `gRPC` uses protocol buffers for serializing data across the wire. 
+
+
+![](./img/etcd-architecture.svg)
 
 etcd is widely used in applications such as [Kubernetes](http://kubernetes.io/).
    
