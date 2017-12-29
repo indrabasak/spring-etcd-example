@@ -11,7 +11,9 @@ import com.coreos.jetcd.options.DeleteOption;
 import com.coreos.jetcd.options.GetOption;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
@@ -129,6 +131,44 @@ public class BookRepositoryImpl implements BookRepository {
         } catch (Exception e) {
             throw new DatabaseException(
                     "Failed to retrieve entities", e);
+        }
+    }
+
+    @Override
+    public Map<String, String> findAllKeys() {
+        try {
+            //byte[] bytes = {0x0};
+            //ByteSequence key = ByteSequence.fromBytes(bytes);
+            ByteSequence key = ByteSequence.fromString("\0");
+            GetOption option = GetOption.newBuilder()
+                    .withSortField(GetOption.SortTarget.KEY)
+                    .withSortOrder(GetOption.SortOrder.DESCEND)
+                    .withRange(key)
+                    .build();
+
+            CompletableFuture<GetResponse> futureResponse =
+                    client.getKVClient().get(key, option);
+
+            GetResponse response = futureResponse.get();
+            if (response.getKvs().isEmpty()) {
+                log.info("Failed to retrieve any keys.");
+                return null;
+            }
+
+
+            Map<String, String> keyValueMap = new HashMap<>();
+            for (KeyValue kv : response.getKvs()) {
+                keyValueMap.put(kv.getKey().toStringUtf8(),
+                        kv.getValue().toStringUtf8());
+            }
+
+            log.info("Retrieved " + response.getKvs().size() + " keys.");
+
+            return keyValueMap;
+
+        } catch (Exception e) {
+            throw new DatabaseException(
+                    "Failed to retrieve any keys.", e);
         }
     }
 
