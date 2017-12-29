@@ -6,7 +6,6 @@
     <groupId>com.basaki</groupId>
     <artifactId>spring-etcd-example</artifactId>
     <version>1.0.0</version>
-    <packaging>pom</packaging>
     <name>Spring Etcd Example</name>
 
     <properties>
