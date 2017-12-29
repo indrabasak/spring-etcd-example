@@ -149,6 +149,25 @@ Booksa3e546bd-85f1-44bf-9edb-bbe7ee293a0a
 {"id":"a3e546bd-85f1-44bf-9edb-bbe7ee293a0a","title":"hello there 2","author":"Indra Basak"}
 ```
 
+### etcd Client Configuration
+You can configure the `etcd` connection in this example Spring Boot application
+by specifying the `ectd` server URIs in the `application.yml`. Currently, the
+application expects the `etcd` server to be available at `http://localhost:2379`.
+
+```yaml
+etcd:
+  uris: http://localhost:2379
+```
+
+You also can specify multiple `etcd` servers as acomma separated list,
+
+```yaml
+etcd:
+  uris: http://host1:2379, http://host2:2380
+```
+
+
+
 ### Build
 To build the JAR, execute the following command from the parent directory:
 
