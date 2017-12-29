@@ -39,7 +39,7 @@ public class SwaggerConfiguration {
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo("Book Sevice API",
-                        "An example of using etcd key value store with Spring"));
+                        "An example of using etcd key-value store with Spring"));
     }
 
     /**
