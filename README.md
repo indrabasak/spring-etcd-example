@@ -27,7 +27,7 @@ of your choice. In my example, the files are saved in a folder named
 To start th etcd server, naivigate to the folder where you saved the 
 downloaded binaries earlier. In this example, the saved folder is `etcd-v3.3.0`.
 
-Type the following command to start a single-member cluster of etcd,
+Type the following command to start a single-member cluster of `etcd`,
 
 ```sh
 etcd
@@ -73,6 +73,73 @@ $ ./etcd
 2017-12-28 10:39:29.071203 I | etcdserver: published {Name:default ClientURLs:[http://localhost:2379]} to cluster cdf818194e3a8c32
 2017-12-28 10:39:29.072107 N | embed: serving insecure client requests on 127.0.0.1:2379, this is strongly discouraged!
 ```
+### Running etcdctl
+`etcdctl` is a command line client for `etcd`. Before using `etcdctl`, set the
+environment variable,`ETCDCTL_API`, to use version 3 API of etcd.
+
+```bash
+export ETCDCTL_API=3
+```
+
+The `etcdctl` tool is located in the same folder as `etcd`. 
+
+#### PUT Command
+Use `PUT` command to create a new key-value pair. Use the following coomand to 
+create a key named `foo` with a value named `bar`.
+
+```bash
+./etcdctl put foo bar 
+```
+
+It should print out `OK` if everything goes well.
+
+#### GET Command
+Use `GET` command to retrieve the value,
+
+```bash
+./etcdctl get foo
+```
+
+The output should be,
+
+```bash
+foo
+bar
+```
+
+There shouldn't be any output if no key is found.
+
+To retrieve all keys, provide an empty string as key,
+
+```bash
+ ./etcdctl get "" --prefix=true
+```
+
+Here is the output,
+
+```bash
+bc168652-9f13-4866-bab2-158e27fe19f5
+{"id":"bc168652-9f13-4866-bab2-158e27fe19f5","title":"Indra-1","author":"Indra Basak"}
+c5413351-c292-4fdf-80ae-876cf8e9e8fc
+{"id":"c5413351-c292-4fdf-80ae-876cf8e9e8fc","title":"indra's book","author":"indra"}
+```
+
+To retrieve all keys with prefix `Books`, use the following command,
+
+```bash
+./etcdctl get "Books" --prefix=true
+```
+
+Here is the output,
+
+```bash
+Books32a4c9fb-dd79-4a15-a139-51317da3f2e3
+{"id":"32a4c9fb-dd79-4a15-a139-51317da3f2e3","title":"Indra's Chronicle","author":"Indra Basak"}
+Books577c6ba4-303e-4065-90f1-bdf8ad255911
+{"id":"577c6ba4-303e-4065-90f1-bdf8ad255911","title":"hello there","author":"Indra Basak"}
+Booksa3e546bd-85f1-44bf-9edb-bbe7ee293a0a
+{"id":"a3e546bd-85f1-44bf-9edb-bbe7ee293a0a","title":"hello there 2","author":"Indra Basak"}
+```
 
 ### Build
 To build the JAR, execute the following command from the parent directory:
@@ -81,6 +148,41 @@ To build the JAR, execute the following command from the parent directory:
 mvn clean install
 ```
 
+### Run
+Run the executable jar from the command to start the application,
+
+```bash
+java -jar target/spring-etcd-example-1.0.0.jar
+```
+
+You should have the following output once the application starts up successfully,
+
+```bash
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v1.5.8.RELEASE)
+
+2017-12-28 17:20:32.659  INFO 13438 --- [           main] com.basaki.Application                   : Starting Application on ibasa-mb-46063.local with PID 13438 (/Users/spring-etcd-example/target/spring-etcd-example-1.0.0.jar started by indra.basak in /Users/spring-etcd-example)
+2017-12-28 17:20:32.663  INFO 13438 --- [           main] com.basaki.Application                   : No active profile set, falling back to default profiles: default
+2017-12-28 17:20:32.733  INFO 13438 --- [           main] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@2f333739: startup date [Thu Dec 28 17:20:32 PST 2017]; root of context hierarchy
+...
+2017-12-28 17:20:35.998  INFO 13438 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2017-12-28 17:20:36.060  INFO 13438 --- [           main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2017-12-28 17:20:36.394  INFO 13438 --- [           main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 8080 (http)
+2017-12-28 17:20:36.399  INFO 13438 --- [           main] com.basaki.Application                   : Started Application in 4.388 seconds (JVM running for 4.883)
+
+```
+
+### Usage
+The application starts up at port `8080`. You can access the swagger UI at 
+`http://localhost:8080/swagger-ui.html`. From the UI, you can create, retrieve,
+and delete book entities.
+
+![](./img/swagger-ui.png)
 
 [travis-badge]: https://travis-ci.org/indrabasak/spring-etcd-example.svg?branch=master
 [travis-badge-url]: https://travis-ci.org/indrabasak/spring-etcd-example/
