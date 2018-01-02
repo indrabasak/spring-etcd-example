@@ -53,7 +53,7 @@ public class BookRepositoryImpl implements BookRepository {
         entity.setId(UUID.randomUUID());
 
         try {
-            String key = PREFIX + entity.getId().toString();
+            String key = getKey(entity.getId());
             client.getKVClient().put(
                     ByteSequence.fromString(key),
                     ByteSequence.fromString(
@@ -75,7 +75,7 @@ public class BookRepositoryImpl implements BookRepository {
         }
 
         try {
-            String key = PREFIX + id.toString();
+            String key = getKey(id);
             CompletableFuture<GetResponse> futureResponse =
                     client.getKVClient().get(
                             ByteSequence.fromString(key));
@@ -178,8 +178,9 @@ public class BookRepositoryImpl implements BookRepository {
         }
 
         try {
+            String key = getKey(id);
             DeleteResponse response = client.getKVClient().delete(
-                    ByteSequence.fromString(id.toString())).get();
+                    ByteSequence.fromString(key)).get();
 
             if (response.getDeleted() == 1) {
                 log.info("Deleted book with ID " + id);
@@ -208,5 +209,9 @@ public class BookRepositoryImpl implements BookRepository {
             throw new DatabaseException(
                     "Failed to delete all books.", e);
         }
+    }
+
+    private String getKey(UUID id) {
+        return PREFIX + id.toString();
     }
 }
